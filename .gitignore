@@ -6,5 +6,5 @@ target
 /.project
 /.settings
 /RUNNING_PID
-*.json
+*.2048.json
 *.xml
