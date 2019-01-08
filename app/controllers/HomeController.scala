@@ -1,67 +1,79 @@
 package controllers
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
 import akka.stream.Materializer
 import com.google.gson.Gson
+import com.mohiva.play.silhouette
+import com.mohiva.play.silhouette.api.actions.SecuredRequest
 import de.htwg.se.twothousandfortyeight.controller.turnBaseImpl.Turn
 import de.htwg.se.twothousandfortyeight.controller.TurnMade
 import de.htwg.se.twothousandfortyeight.model.gameModel.gameBaseImpl.Game
 import javax.inject._
 import play.api.libs.streams.ActorFlow
-import play.api.mvc._
+import play.api.mvc.{ AbstractController, AnyContent, ControllerComponents, _ }
+import utils.auth.DefaultEnv
+import javax.inject.Inject
+import com.mohiva.play.silhouette.api.actions.SecuredRequest
+import com.mohiva.play.silhouette.api.{ LogoutEvent, Silhouette }
+import org.webjars.play.WebJarsUtil
+import play.api.i18n.I18nSupport
+import utils.auth.DefaultEnv
 
+import scala.concurrent.Future
+import scala.concurrent.Future
 import scala.swing.Reactor
 
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents)(implicit system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
+class HomeController @Inject() (cc: ControllerComponents, silhouette: Silhouette[DefaultEnv])(implicit system: ActorSystem, mat: Materializer, webJarsUtil: WebJarsUtil, assets: AssetsFinder) extends AbstractController(cc) with I18nSupport {
   val game = new Game
   val turn = new Turn
   val gson = new Gson
 
-  def index() = Action {
-    Ok(views.html.index())
-  }
+  //  def index() = Action {
+  //    Ok(views.html.index())
+  //  }
 
-  def start() = Action {
+  def start() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
+
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('r'), Math.random(), Math.random())
 
-    Ok(views.html.game())
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def up() = Action {
+  def up() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('w'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def down() = Action {
+  def down() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('s'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def left() = Action {
+  def left() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('a'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def right() = Action {
+  def right() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('d'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def reset() = Action {
+  def reset() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('r'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
-  def undo() = Action {
+  def undo() = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     turn.makeTurn(game, de.htwg.se.twothousandfortyeight.util.Utils.processKey('q'), Math.random(), Math.random())
 
-    Ok(gson.toJson(game))
+    Future.successful(Ok(views.html.game(request.identity)))
   }
 
   def gameToJsonAjax() = Action {
@@ -90,7 +102,7 @@ class HomeController @Inject()(cc: ControllerComponents)(implicit system: ActorS
       case event: TurnMade => sendJsonToClient
     }
 
-    def sendJsonToClient = {
+    def sendJsonToClient() = {
       println("Received event from Controller")
       out ! (gson.toJson(game))
       println("Sent Json to Client")
