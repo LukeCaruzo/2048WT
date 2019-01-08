@@ -1,9 +1,12 @@
 {
-    "name": "play-silhouette-seed",
-    "description": "Seed project to show how Silhouette can be implemented into a Play Framework application.",
+    "name": "2048",
+    "description": "HTWG WT Project.",
     "keywords": [
         "Play",
-        "Silhouette"
+        "Silhouette",
+        "2048",
+        "HTWG",
+        "WT"
     ],
     "website": "https://github.com/mohiva/play-silhouette-seed",
     "repository": "https://github.com/mohiva/play-silhouette-seed",
