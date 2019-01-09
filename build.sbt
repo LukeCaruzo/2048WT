@@ -2,7 +2,7 @@ import com.typesafe.sbt.SbtScalariform._
 
 import scalariform.formatter.preferences._
 
-name := """2048WT"""
+name := "play-silhouette-seed"
 
 organization := "de.htwg.wt"
 
