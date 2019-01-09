@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/htwg-wt-2048 -Dhttp.port=${PORT} -Dconfig.resource=${PLAY_CONF_FILE}
+web: target/universal/stage/bin/2048WT -Dhttp.port=${PORT}
