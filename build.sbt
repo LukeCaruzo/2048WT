@@ -14,6 +14,8 @@ resolvers += Resolver.jcenterRepo
 
 resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
+libraryDependencies += "org.apache.commons" % "commons-lang3" % "3.8.1"
+
 libraryDependencies += guice
 
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
