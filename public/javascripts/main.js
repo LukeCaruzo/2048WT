@@ -81,7 +81,7 @@ function ajax() {
 }
 
 function webSocket() {
-    var websocket = new WebSocket("ws://localhost:9000/toJsonWebSocket");
+    var websocket = new WebSocket("wss://htwg-wt-2048.herokuapp.com/toJsonWebSocket"); // "ws://localhost:9000/toJsonWebSocket"
     websocket.setTimeout
 
     websocket.onopen = function (event) {
